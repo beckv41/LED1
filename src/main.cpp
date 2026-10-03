@@ -1,44 +1,43 @@
+#include <Arduino.h>
 #include <FastLED.h>
 
+#include "LEDSection.h"
 
-
-#define LED_PIN 18
-#define NUM_LEDS 52
+constexpr uint8_t LED_PIN = 18;
+constexpr uint16_t NUM_LEDS = 52;
+constexpr uint8_t BRIGHTNESS = 100;
 
 CRGB leds[NUM_LEDS];
 
-CRGB colors[] = {
-    CRGB::Red,
-    CRGB::Green,
-    CRGB::Blue
-};
-
-
+// These sections cover the strip: pixels 0-16, 17-34, and 35-51.
+LEDSection leftSection(leds, NUM_LEDS, 0, 17);
+LEDSection centerSection(leds, NUM_LEDS, 17, 18);
+LEDSection rightSection(leds, NUM_LEDS, 35, 17);
 
 void setup() {
-
     FastLED.addLeds<WS2811, LED_PIN, RGB>(leds, NUM_LEDS);
-    FastLED.setBrightness(100);
+    FastLED.setBrightness(BRIGHTNESS);
 
-
+    // Start with all pixels off.
+    FastLED.clear();
+    FastLED.show();
 }
 
-void loop()
-{
+void loop() {
+    // Each section uses its own zero-based pixel range.
+    leftSection.fill(CRGB::Red);
+    centerSection.fill(CRGB::Green);
+    rightSection.fill(CRGB::Blue);
 
-    for(int j = 0; j < 3; j++)
-    {
-        FastLED.clear();
+    // LEDSection changes the shared pixel buffer.
+    // FastLED.show() sends all section changes to the strip at once.
+    FastLED.show();
+    delay(1000);
 
-        for(int i=0; i<NUM_LEDS;i++)
-        {
-            
-            leds[i]=colors[j];
-            FastLED.show();
-            
-        }
-        delay(1000);
-    }
+    leftSection.clear();
+    centerSection.clear();
+    rightSection.clear();
+
+    FastLED.show();
+    delay(500);
 }
-
-//note new LED dims are 6mm wide, 15mm tall, light is upper 3.5mm
