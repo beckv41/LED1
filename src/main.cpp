@@ -1,23 +1,44 @@
-#include <Arduino.h>
+#include <FastLED.h>
 
-// put function declarations here:
-int myFunction(int, int);
+
+
+#define LED_PIN 18
+#define NUM_LEDS 52
+
+CRGB leds[NUM_LEDS];
+
+CRGB colors[] = {
+    CRGB::Red,
+    CRGB::Green,
+    CRGB::Blue
+};
+
+
 
 void setup() {
-  // put your setup code here, to run once:
-  int result = myFunction(2, 3);
+
+    FastLED.addLeds<WS2811, LED_PIN, RGB>(leds, NUM_LEDS);
+    FastLED.setBrightness(100);
+
+
 }
 
-void loop() {
-  // put your main code here, to run repeatedly:
+void loop()
+{
+
+    for(int j = 0; j < 3; j++)
+    {
+        FastLED.clear();
+
+        for(int i=0; i<NUM_LEDS;i++)
+        {
+            
+            leds[i]=colors[j];
+            FastLED.show();
+            
+        }
+        delay(1000);
+    }
 }
 
-// put function definitions here:
-int myFunction(int x, int y) {
-  return x + y;
-  
-}
-
-/*
-  once another Test code!!!
-*/
+//note new LED dims are 6mm wide, 15mm tall, light is upper 3.5mm
