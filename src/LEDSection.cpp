@@ -1,5 +1,19 @@
 #include "LEDSection.h"
+/*
+LEDSection::LEDSection(CRGB* strip, uint16_t stripLength,
+                       uint16_t firstPixel, uint16_t pixelCount)
+    : strip_(strip),
+      firstPixel_(firstPixel <= stripLength ? firstPixel : stripLength),
+      pixelCount_(0)
+{
+    if (strip_ == nullptr) {
+        return;
+    }
 
+    const uint16_t available = stripLength - firstPixel_;
+    pixelCount_ = pixelCount < available ? pixelCount : available;
+}
+*/
 LEDSection::LEDSection(CRGB* strip, uint16_t stripLength,
                        uint16_t firstPixel, uint16_t pixelCount)
     : strip_(strip),
